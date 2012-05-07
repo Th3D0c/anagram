@@ -45,9 +45,10 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 | These modes are used when working with fopen()/popen()
 |
 */
-define('_IMAGES_DIR_',		'public/images/');
-define('_CSS_DIR_',		'public/stylesheets/');
-define('_JS_DIR_',		'public/javascripts/');
+define('_IMAGES_DIR_',		'/public/images/');
+define('_CSS_DIR_',		'/public/stylesheets/');
+define('_JS_DIR_',		'/public/javascripts/');
+
 
 
 /* End of file constants.php */
