@@ -61,27 +61,24 @@ class Import extends CI_Controller {
 	}
 
     public function validateDouble($word_id) {
+//        phpinfo();die;
         $this->load->database();
         $query = $this->db->get_where('test.words', array('word_id' => $word_id));
         $result = $query->result();
 
-        $this->db->where(
-               'word_value=' ,$result[0]->word_value )
-//               'word_value=' ,"'".$result[0]->word_value."'", false )
-                ->get('test.words' );
-
-        die;
+//        $this->db->where(
+//               'word_value=' ,$result[0]->word_value )
+////               'word_value=' ,"'".$result[0]->word_value."'", false )
+//                ->get('test.words' );
+//
+//        die;
         $this->db->where('word_id', $word_id)->update('test.words', array('validated' => 'true') );
-        $this->db->where(array('word_value='=> $result[0]->word_value, 'word_id!=' => $word_id) )->update('test.words', array('delete' => 'true') );
+        $this->db->where(array('word_value='=> $result[0]->word_value, 'word_id!=' => $word_id) )->update('test.words', array('deleted' => 'true') );
 
     }
 
     public function validate() {
 //		$this->viewlinker->addJsScript('include/welcome');
-//        $query = $this->db->group_by('word_value')->having('Count(*) > 1')->select('word_value')->get('test.words');
-
-//        $query = $this->db->get_where('test.words', array('validated' => 'false'), 100, 0);
-
         $this->load->database();
         // Requete pour avoir les doublons
         // SELECT Count(*), word_value FROM  test.words GROUP BY word_value HAVING Count(*) > 1
@@ -90,10 +87,15 @@ class Import extends CI_Controller {
                                         word_value IN (
                                                 SELECT word_value
                                                 FROM test.words
+                                                WHERE
+                                                    deleted = FALSE
+                                                    AND length BETWEEN 3 AND 8
                                                 GROUP BY
                                                     word_value
                                                 HAVING
                                                     Count(*) > 1
+                                                ORDER BY
+                                                    word_value
                                                     )");
 
         foreach ($query->result() as $row)

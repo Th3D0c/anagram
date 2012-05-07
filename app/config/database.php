@@ -47,11 +47,11 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
+$db['default']['hostname'] = 'pgsql:host=localhost';
 $db['default']['username'] = 'anagram';
 $db['default']['password'] = 'anagram';
 $db['default']['database'] = 'anagram';
-$db['default']['dbdriver'] = 'postgre';
+$db['default']['dbdriver'] = 'pdo';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
