@@ -66,19 +66,13 @@ class Import extends CI_Controller {
         $query = $this->db->get_where('test.words', array('word_id' => $word_id));
         $result = $query->result();
 
-//        $this->db->where(
-//               'word_value=' ,$result[0]->word_value )
-////               'word_value=' ,"'".$result[0]->word_value."'", false )
-//                ->get('test.words' );
-//
-//        die;
         $this->db->where('word_id', $word_id)->update('test.words', array('validated' => 'true') );
         $this->db->where(array('word_value='=> $result[0]->word_value, 'word_id!=' => $word_id) )->update('test.words', array('deleted' => 'true') );
-
+        echo  'true';
     }
 
-    public function validate() {
-//		$this->viewlinker->addJsScript('include/welcome');
+    public function checkDoublons() {
+		$this->viewlinker->addJsScript('include/import');
         $this->load->database();
         // Requete pour avoir les doublons
         // SELECT Count(*), word_value FROM  test.words GROUP BY word_value HAVING Count(*) > 1
@@ -104,7 +98,24 @@ class Import extends CI_Controller {
                 $view_data['doublon_list'][$row->word_value][] = $row;
             }
         }
-    	$this->viewlinker->view('wordsAnalyzer/import_validate', $view_data);
+    	$this->viewlinker->view('wordsAnalyzer/import_checkDoublons', $view_data);
+	}
+
+    public function checkByLength() {
+        //		$this->viewlinker->addJsScript('include/import');
+        $this->load->database();
+
+        if( !$this->input->post('length') ) {
+            $length = 3;
+        } else {
+            $length = $this->input->post('length');
+        }
+        // Requete pour avoir les doublons
+        // SELECT Count(*), word_value FROM  test.words GROUP BY word_value HAVING Count(*) > 1
+        $query = $this->db->query("SELECT * FROM test.words WHERE length = ".$length ." AND deleted = false");
+        $view_data['words_list'] = $query->result();
+
+    	$this->viewlinker->view('wordsAnalyzer/import_checkByLength', $view_data);
 	}
 
 	/**

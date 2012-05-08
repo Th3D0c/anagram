@@ -1,5 +1,5 @@
 <div id="container" >
-    <h1>Words Validation</h1>
+    <h1>Words Doublons</h1>
     <br/>
     <?php
 //    var_dump($doublon_list);
@@ -7,15 +7,15 @@
         echo '<div align="center"><b>'.$doublon_key.'</b><br/>';
         foreach($words_list as $word) {
 //            var_dump($word);
-            echo '<div style="display: inline-block;">
+            echo '<div class="doublons_entry_'.intval($word->validated).'_'.intval($word->deleted).'">
                         <div style="display: inline-block; vertical-align: top;">
                             #'.$word->word_id.' <em>'.$word->word_label.'</em>
                         </div>
                         <div style="display: inline-block;">
                             <a href="http://www.google.com/search?q=dictionnaire+'.$word->word_label.'">link dico</a> <br/>
-                            validate this
+                            <button onclick="validateDoublon('.$word->word_id.')">validate</button>
                         </div>
-                    </div>';
+                    </div> ';
         }
         echo '</div><hr/>';
     }
