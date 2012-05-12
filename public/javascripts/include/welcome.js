@@ -1,17 +1,6 @@
-var anagrams_list = [
-    'salut',
-    'las'
-];
+var anagrams_list = new Array();
 
-var letters_list = [
-    's',
-    'a',
-    'l',
-    'u',
-    't',
-    'y',
-    'w',
-];
+var letters_list = new Array();
 
 var current_word = '';
 var letters_watchdog = 0;
@@ -66,26 +55,53 @@ function changeTimer(count) {
     $('#timer_screen').text(tmp.toFixed(1));
 } // END changeTimer
 
+function getRandomWords(letters_set) {
+
+    $.getJSON('welcome/getRandomWords/'+ letters_set, function(data) {
+        $.each(data, function(i, word) {
+            anagrams_list.push(word.word_value);
+            $('#words_container').append('<div id="response_'+word.word_value+'">'+word.word_value+'</div>');
+        });
+    });
+}
+
+function getRandomLetters() {
+    $.ajax({
+        url: 'welcome/getRandomLetters',
+        dataType: 'json',
+        async: false
+        }).done(function(data) {
+                    $.each(data, function(i, letter) {
+                        letters_list.push(letter.letter_value);
+                        $('#letter_container').append('<span id="'+letter.letter_value+'">'+letter.letter_value.toUpperCase()+'&nbsp;</span>');
+                    });
+                });
+}
+
 $(document).ready(function() {
     // Set results words list
-    jQuery.each(anagrams_list, function(i, word) {
-        $('#words_container').append('<div id="response_'+word+'">'+word+'</div>');
-    });
+    getRandomLetters();
+    console.log(letters_list);
+    getRandomWords(letters_list.join(''))
 
     // Set picked letters
-    jQuery.each(letters_list, function(i, letter) {
-        $('#letter_container').append('<span id="'+letter+'">'+letter.toUpperCase()+'&nbsp;</span>');
-    });
+//    jQuery.each(letters_list, function(i, letter) {
+//        $('#letter_container').append('<span id="'+letter+'">'+letter.toUpperCase()+'&nbsp;</span>');
+//    });
+
+
 
     // Init timer
-    mytimer(10000,
-        function(steps, count) {
-            changeTimer(count);
-        },
-        function(steps, count) {
-            gameOverScreen();
-    });
+//    mytimer(10000,
+//        function(steps, count) {
+//            changeTimer(count);
+//        },
+//        function(steps, count) {
+//            gameOverScreen();
+//    });
 
+
+    // keybord management and word validation
     $(document).keypress(function(event) {
 //    console.log('anim: %i', event.which);
 
@@ -117,6 +133,9 @@ $(document).ready(function() {
             }
             resetCurrentWord();
 
+            event.preventDefault();
+        // trying to delete last letter, trap and prevent browser 'history back' event
+        } else if ( event.which == 8 ) {
             event.preventDefault();
         }
     }); // END Document.keypress
