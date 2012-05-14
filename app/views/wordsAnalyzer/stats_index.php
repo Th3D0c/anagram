@@ -5,6 +5,7 @@
         <div style="display: inline-block; text-align: center; font-family: Verdana">
             <b>A stacked Rose chart</b><br />
             <canvas id="rose3" width="450" height="350">[No canvas support]</canvas>
+            <canvas id="validated" width="120" height="350">[No canvas support]</canvas>
         </div>
     </div>
     <br/><br/><br/><br/><br/><br/>
